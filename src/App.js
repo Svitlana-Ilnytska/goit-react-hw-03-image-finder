@@ -14,35 +14,29 @@ export default class App extends Component {
     error: null,
   };
 
-  componentDidMount() {
-    this.setState({ query: "" });
+  componentDidUpdate(prevProps, prevState) {
+    const prevQuery = prevState.query;
+    const nextQuery = this.state.query;
+
+    if (prevQuery !== nextQuery) {
+      this.fetchImages();
+    }
   }
-  fetchImages = (query) => {
+
+  fetchImages = (query, page) => {
     this.setState({ isLoading: true });
 
     api
-      .fetchImages(query)
-      .then(({ hits }) => this.setState({ images: hits }))
+      .fetchImages(query, page)
+      .then(({ hits }) =>
+        this.setState((prevState) => ({
+          images: hits,
+          page: prevState.page + 1,
+        }))
+      )
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   const prevImages = prevProps.images;
-  //   const nextImages = this.props.images;
-
-  //   if (prevImages !== nextImages) {
-  //     this.setState({ status: "pending" });
-
-  //     this.setState({ loading: true });
-  //     fetch(
-  //       `${BASE_URL}/api/?image_type=photo&orientation=horizontal&q=${nextImages}&page=1&per_page=12&key=${API_KEY}`
-  //     )
-  //       .then((res) => res.json())
-  //       .then((image) => this.setState({ image }))
-  //       .finally(() => this.setState({ loading: false }));
-  //   }
-  // }
 
   handleFormSubmit = (images) => {
     this.setState({ images });
