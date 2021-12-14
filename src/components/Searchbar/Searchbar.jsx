@@ -4,22 +4,22 @@ import css from "./Searchbar.module.css";
 
 export default class Searchbar extends Component {
   state = {
-    imageName: "",
+    images: "",
   };
 
   handleNameChange = (e) => {
-    this.setState({ imageName: e.currentTarget.value.toLowerCase() });
+    this.setState({ images: e.currentTarget.value.toLowerCase() });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.imageName.trim() === "") {
+    if (this.state.images.trim() === "") {
       return console.log("введіть щось");
     }
 
     this.props.onSubmit(this.state.imageName);
-    this.setState({ imageName: "" });
+    this.setState({ images: "" });
   };
 
   render() {
@@ -36,7 +36,7 @@ export default class Searchbar extends Component {
             autocomplete="off"
             autofocus
             placeholder="Search images and photos"
-            value={this.state.imageName}
+            value={this.state.images}
             onChange={this.handleNameChange}
           />
         </form>

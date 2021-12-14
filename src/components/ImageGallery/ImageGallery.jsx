@@ -1,21 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
+import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 
-const ImageGallery = ({ images, onClickImage }) =>
-  images.length > 0 && (
-    <ul>
-      {images.map((image) => {
-        return (
-          <ImageGalleryItem
-            key={image.id}
-            image={image}
-            onClickImage={() => onClickImage(image.id)}
-          />
-        );
-      })}
-    </ul>
-  );
+import css from "./ImageGallery.module.css";
+
+const ImageGallery = ({ images, onClickImage }) => (
+  <ul className={css.imageGallery}>
+    {images.map((image) => {
+      return (
+        <ImageGalleryItem
+          key={image.id}
+          image={image}
+          onClickImage={() => onClickImage(image.id)}
+        />
+      );
+    })}
+  </ul>
+);
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
