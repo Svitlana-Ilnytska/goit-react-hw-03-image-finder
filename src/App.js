@@ -34,10 +34,18 @@ export default class App extends Component {
     });
   };
 
+  scrollToBottom = () => {
+    window.scrollBy({ top: -50, left: 0, behavior: "smooth" });
+  };
+
   fetchImages = () => {
     this.setState({ status: "pending" });
     const { query, page } = this.state;
 
+    if (page !== 1) {
+      this.scrollToBottom();
+    }
+    
     api
       .fetchImages(query, page)
       .then(({ hits }) =>
@@ -47,6 +55,7 @@ export default class App extends Component {
           status: "resolved",
         }))
       )
+
       .catch((error) =>
         this.setState(toast("Trouble. Something is wrong :("), {
           error,
