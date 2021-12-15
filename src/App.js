@@ -88,7 +88,7 @@ export default class App extends Component {
         <div>
           <Searchbar onSubmit={this.onSearchQuery} />
           <ImageGallery images={images} />
-          {images.length >= 12 && <Button onSearch={this.fetchImages} />}
+          {images.length >= 12 ? <Button onSearch={this.fetchImages} /> : null}
           <ToastContainer />
         </div>
       );

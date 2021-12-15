@@ -11,6 +11,7 @@ const ImageGallery = ({ images, onClickImage }) => (
         <li key={image.id} className={css.imageGalleryItem} data-id={image.id}>
           <ImageGalleryItem
             webformatURL={image.webformatURL}
+            largeImageURL={image.largeImageURL}
             tags={image.tags}
             onClickImage={() => onClickImage(image.id)}
           />
@@ -25,6 +26,7 @@ ImageGallery.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
       tags: PropTypes.string,
     }).isRequired
   ).isRequired,

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import css from "./ImageGalleryItem.module.css";
 
-const ImageGalleryItem = ({ id, webformatURL, largeImageURL, tags, onClickImage }) => (
+const ImageGalleryItem = ({ id, webformatURL, tags, onClickImage }) => (
   <img
     src={webformatURL}
     alt={tags}
@@ -17,12 +17,9 @@ ImageGalleryItem.defaultProps = {
 };
 
 ImageGalleryItem.propTypes = {
-
   id: PropTypes.number,
   webformatURL: PropTypes.string,
-  largeImageURL: PropTypes.string,
   tags: PropTypes.string,
-
   onClickImage: PropTypes.func.isRequired,
 };
 
