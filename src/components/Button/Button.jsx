@@ -9,8 +9,12 @@ const Button = ({ onSearch }) => (
   </button>
 );
 
+Button.defaultProps = {
+  onLoadMore: () => {},
+};
+
 Button.propTypes = {
-    onLoadMore: PropTypes.func.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
 };
 
 export default Button;
