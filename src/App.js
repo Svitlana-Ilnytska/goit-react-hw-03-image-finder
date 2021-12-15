@@ -7,14 +7,14 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { ToastContainer, toast } from "react-toastify";
 import * as api from "./services/api";
 
-import * as styles from "./App.css";
+// import * as styles from "./App.css";
 
 export default class App extends Component {
   state = {
     images: [],
     query: "",
     page: 1,
-    isLoading: false,
+    status: "idle",
     error: null,
   };
 
@@ -35,21 +35,24 @@ export default class App extends Component {
   };
 
   fetchImages = () => {
-    this.setState({ isLoading: true });
+    this.setState({ status: "pending" });
     const { query, page } = this.state;
-    
+
     api
       .fetchImages(query, page)
       .then(({ hits }) =>
         this.setState((prevState) => ({
           images: [...prevState.images, ...hits],
           page: prevState.page + 1,
+          status: "resolved",
         }))
       )
       .catch((error) =>
-        this.setState(toast("Trouble. Something is wrong :("), { error })
-      )
-      .finally(() => this.setState({ isLoading: false }));
+        this.setState(toast("Trouble. Something is wrong :("), {
+          error,
+          status: "rejected",
+        })
+      );
   };
 
   handleFormSubmit = (images) => {
@@ -57,27 +60,29 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, isLoading } = this.state;
+    const { images, status } = this.state;
 
-    return (
-      <div>
-        <Searchbar onSubmit={this.onSearchQuery} />
-        {/* {images.length < 1 && (
-          <>
-            <p>No more</p>
-          </>
-        )} */}
-        {isLoading ? (
-          <Spiner />
-        ) : (
-          <>
-            <ImageGallery images={images} />
+    if (status === "idle") {
+      return <Searchbar onSubmit={this.onSearchQuery} />;
+    }
 
-            {images.length >= 12 && <Button onSearch={this.fetchImages} />}
-          </>
-        )}
-        <ToastContainer />
-      </div>
-    );
+    if (status === "pending") {
+      return <Spiner />;
+    }
+
+    if (status === "rejected") {
+      return <p>No more</p>;
+    }
+
+    if (status === "resolved") {
+      return (
+        <div>
+          <Searchbar onSubmit={this.onSearchQuery} />
+          <ImageGallery images={images} />
+          {images.length >= 12 && <Button onSearch={this.fetchImages} />}
+          <ToastContainer />
+        </div>
+      );
+    }
   }
 }
