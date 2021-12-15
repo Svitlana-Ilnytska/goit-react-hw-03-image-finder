@@ -7,8 +7,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { ToastContainer, toast } from "react-toastify";
 import * as api from "./services/api";
 
-// eslint-disable-next-line
-import * as styles from "./App.css";
+import "./App.css";
 
 export default class App extends Component {
   state = {
