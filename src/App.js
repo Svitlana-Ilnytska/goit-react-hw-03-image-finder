@@ -7,7 +7,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { ToastContainer, toast } from "react-toastify";
 import * as api from "./services/api";
 
-// import * as styles from "./App.css";
+// eslint-disable-next-line
+import * as styles from "./App.css";
 
 export default class App extends Component {
   state = {
@@ -45,7 +46,7 @@ export default class App extends Component {
     if (page !== 1) {
       this.scrollToBottom();
     }
-    
+
     api
       .fetchImages(query, page)
       .then(({ hits }) =>
