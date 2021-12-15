@@ -6,22 +6,19 @@ import css from "./ImageGallery.module.css";
 
 const ImageGallery = ({ images, onClickImage }) => (
   <ul className={css.imageGallery}>
-    {images.map(({ id, webformatURL, tags }) => {
+    {images.map((image) => {
       return (
-        <ImageGalleryItem
-          key={id}
-          image={webformatURL}
-          tags={tags}
-          onClickImage={() => onClickImage(id)}
-        />
+        <li key={image.id} className={css.imageGalleryItem}>
+          <ImageGalleryItem
+            webformatURL={image.webformatURL}
+            tags={image.tags}
+            onClickImage={() => onClickImage(image.id)}
+          />
+        </li>
       );
     })}
   </ul>
 );
-
-ImageGallery.defaultProps = {
-  tags: "",
-};
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import css from "./Searchbar.module.css";
 
@@ -15,7 +17,7 @@ export default class Searchbar extends Component {
     e.preventDefault();
 
     if (this.state.query.trim() === "") {
-      return console.log("введіть щось");
+      return toast("Please enter something;)");
     }
 
     this.props.onSubmit(this.state.query);
@@ -34,10 +36,11 @@ export default class Searchbar extends Component {
           <input
             className={css.input}
             type="text"
-            autocomplete="off"
-            autofocus
+            // autocomplete="off"
+            // autofocus
             placeholder="Search images and photos"
             value={query}
+            name="query"
             onChange={this.handleNameChange}
           />
         </form>
