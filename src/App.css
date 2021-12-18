@@ -35,4 +35,8 @@ html {
     grid-gap: 16px;
     padding-bottom: 24px;
   }
-  
+
+
+  .notification {
+    text-align: center;
+  }

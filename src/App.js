@@ -18,7 +18,7 @@ export default class App extends Component {
     page: 1,
     status: "idle",
     error: null,
-    // largeImageURL: "",
+    largeImageURL: "",
     showModal: false,
   };
 
@@ -29,8 +29,15 @@ export default class App extends Component {
     if (prevQuery !== nextQuery) {
       this.fetchImages();
     }
+    const prevPage = prevState.page;
+    const nextPage = this.state.page;
+    if (prevPage !== nextPage) {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }
-
   onSearchQuery = (query) => {
     this.setState({
       images: [],
@@ -39,17 +46,9 @@ export default class App extends Component {
     });
   };
 
-  scrollToBottom = () => {
-    window.scrollBy({ top: -50, left: 0, behavior: "smooth" });
-  };
-
   fetchImages = () => {
     this.setState({ status: "pending" });
     const { query, page } = this.state;
-
-    if (page !== 1) {
-      this.scrollToBottom();
-    }
 
     api
       .fetchImages(query, page)
@@ -79,7 +78,8 @@ export default class App extends Component {
       largeImageURL: "",
     }));
   };
-  handleClickItem = (largeImageURL) => {
+
+  handleClickImage = (largeImageURL) => {
     this.setState({
       largeImageURL: largeImageURL,
       showModal: true,
@@ -105,7 +105,10 @@ export default class App extends Component {
       return (
         <div>
           <Searchbar onSubmit={this.onSearchQuery} />
-          <ImageGallery images={images} onClickImage={this.handleClickItem} />
+          <ImageGallery images={images} onClickImage={this.handleClickImage} />
+          {images.length < 1 && (
+            <p className="notification"> Nothing found :( </p>
+          )}
           {showModal && (
             <Modal onClose={this.toggleModal}>
               <img src={largeImageURL} alt="" />
