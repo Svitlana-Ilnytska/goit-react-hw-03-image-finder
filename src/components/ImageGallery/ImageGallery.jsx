@@ -13,7 +13,7 @@ const ImageGallery = ({ images, onClickImage }) => (
             webformatURL={image.webformatURL}
             largeImageURL={image.largeImageURL}
             tags={image.tags}
-            onClickImage={() => onClickImage(image.id)}
+            onClickImage={() => onClickImage(image.largeImageURL)}
           />
         </li>
       );

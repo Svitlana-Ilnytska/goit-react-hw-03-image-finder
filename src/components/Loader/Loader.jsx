@@ -5,7 +5,6 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import css from './Loader.module.css';
 
 export default class Spiner extends Component {
-  //other logic
   render() {
     return (
       <div className={css.spiner}>
@@ -14,7 +13,7 @@ export default class Spiner extends Component {
           color="#00BFFF"
           height={100}
           width={100}
-          timeout={3000} //3 secs
+          timeout={3000} 
         />
       </div>
     );

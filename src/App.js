@@ -3,6 +3,8 @@ import Searchbar from "./components/Searchbar/Searchbar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Spiner from "./components/Loader/Loader";
 import Button from "./components/Button/Button";
+import Modal from "./components/Modal/Modal";
+
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { ToastContainer, toast } from "react-toastify";
 import * as api from "./services/api";
@@ -16,6 +18,8 @@ export default class App extends Component {
     page: 1,
     status: "idle",
     error: null,
+    // largeImageURL: "",
+    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,6 +30,7 @@ export default class App extends Component {
       this.fetchImages();
     }
   }
+
   onSearchQuery = (query) => {
     this.setState({
       images: [],
@@ -68,8 +73,21 @@ export default class App extends Component {
     this.setState({ images });
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      largeImageURL: "",
+    }));
+  };
+  handleClickItem = (largeImageURL) => {
+    this.setState({
+      largeImageURL: largeImageURL,
+      showModal: true,
+    });
+  };
+
   render() {
-    const { images, status } = this.state;
+    const { images, status, showModal, largeImageURL } = this.state;
 
     if (status === "idle") {
       return <Searchbar onSubmit={this.onSearchQuery} />;
@@ -80,14 +98,19 @@ export default class App extends Component {
     }
 
     if (status === "rejected") {
-      return <p>No more</p>;
+      return <p> Please try again latter </p>;
     }
 
     if (status === "resolved") {
       return (
         <div>
           <Searchbar onSubmit={this.onSearchQuery} />
-          <ImageGallery images={images} />
+          <ImageGallery images={images} onClickImage={this.handleClickItem} />
+          {showModal && (
+            <Modal onClose={this.toggleModal}>
+              <img src={largeImageURL} alt="" />
+            </Modal>
+          )}
           {images.length >= 12 ? <Button onSearch={this.fetchImages} /> : null}
           <ToastContainer />
         </div>
