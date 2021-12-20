@@ -16,10 +16,10 @@ export default class App extends Component {
     images: [],
     query: "",
     page: 1,
-    status: "idle",
     error: null,
     largeImageURL: "",
     showModal: false,
+    loader: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -47,8 +47,8 @@ export default class App extends Component {
   };
 
   fetchImages = () => {
-    this.setState({ status: "pending" });
     const { query, page } = this.state;
+    this.setState({ loader: true });
 
     api
       .fetchImages(query, page)
@@ -56,18 +56,16 @@ export default class App extends Component {
         this.setState((prevState) => ({
           images: [...prevState.images, ...hits],
           page: prevState.page + 1,
-          status: "resolved",
         }))
       )
 
-      .catch((error) =>
-        this.setState(toast("Trouble. Something is wrong :("), {
-          error,
-          status: "rejected",
-        })
-      );
-  };
+      .catch((error) => {
+        toast("Trouble. Something is wrong :(");
+        this.setState({ error });
+      })
 
+      .finally(() => this.setState({ loader: false }));
+  };
   handleFormSubmit = (images) => {
     this.setState({ images });
   };
@@ -87,37 +85,27 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, status, showModal, largeImageURL } = this.state;
+    const { images, showModal, largeImageURL, loader } = this.state;
 
-    if (status === "idle") {
-      return <Searchbar onSubmit={this.onSearchQuery} />;
-    }
-
-    if (status === "pending") {
-      return <Spiner />;
-    }
-
-    if (status === "rejected") {
-      return <p> Please try again latter </p>;
-    }
-
-    if (status === "resolved") {
-      return (
-        <div>
-          <Searchbar onSubmit={this.onSearchQuery} />
-          <ImageGallery images={images} onClickImage={this.handleClickImage} />
-          {images.length < 1 && (
-            <p className="notification"> Nothing found :( </p>
-          )}
-          {showModal && (
-            <Modal onClose={this.toggleModal}>
-              <img src={largeImageURL} alt="" />
-            </Modal>
-          )}
-          {images.length >= 12 ? <Button onSearch={this.fetchImages} /> : null}
-          <ToastContainer />
-        </div>
-      );
-    }
+    return (
+      <div>
+        {loader && <Spiner />}
+        <Searchbar onSubmit={this.onSearchQuery} />
+        <ImageGallery images={images} onClickImage={this.handleClickImage} />
+        {images.length < 1 && (
+          <p className="notification">
+            {" "}
+            Please enter what you want to see ¯\_(ツ)_/¯{" "}
+          </p>
+        )}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={largeImageURL} alt="" width={650} />
+          </Modal>
+        )}
+        {images.length >= 12 ? <Button onSearch={this.fetchImages} /> : null}
+        <ToastContainer />
+      </div>
+    );
   }
 }
